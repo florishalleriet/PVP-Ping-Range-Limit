@@ -1,31 +1,25 @@
 {
-	"schemaVersion": 1,
-	"id": "pvp-ping-range-limit",
-	"version": "${version}",
-	"name": "PVP Ping Range Limit",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Me!"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/pvp-ping-range-limit/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"com.flopasss.pvppingrangelimit.PVPPingRangeLimit"
-		]
-	},
-	"mixins": [
-		"pvp-ping-range-limit.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=0.19.2",
-		"minecraft": "~1.21.11",
-		"java": ">=21",
-		"fabric-api": "*"
-	}
+  "schemaVersion": 1,
+  "id": "pvp-ping-range-limit",
+  "version": "${version}",
+  "name": "PVP Ping Range Limit",
+  "description": "Minecraft Fabric mod that limits PVP between a certain ping range",
+  "authors": ["Flopasss"],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/pvp-ping-range-limit/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.flopasss.pvppingrangelimit.PVPPingRangeLimit"]
+  },
+  "mixins": ["pvp-ping-range-limit.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.19.2",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
 }
