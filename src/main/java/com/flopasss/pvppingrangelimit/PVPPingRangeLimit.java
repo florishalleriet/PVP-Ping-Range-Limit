@@ -2,6 +2,7 @@ package com.flopasss.pvppingrangelimit;
 
 import com.flopasss.pvppingrangelimit.command.PVPPingRangeLimitCommand;
 import com.flopasss.pvppingrangelimit.config.PVPPingRangeLimitConfig;
+import com.flopasss.pvppingrangelimit.util.PingManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.slf4j.Logger;
@@ -31,6 +32,9 @@ public class PVPPingRangeLimit implements ModInitializer {
             (dispatcher, registryAccess, environment) ->
                 PVPPingRangeLimitCommand.register(dispatcher)
         );
+
+        // Initialize the PingManager to start tracking player pings
+        PingManager.init();
 
         LOGGER.info("Flopasss PVP Ping Range Limit initialized");
     }
