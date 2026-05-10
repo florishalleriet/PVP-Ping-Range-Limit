@@ -13,12 +13,12 @@ public abstract class ServerPlayerMixin implements DataHolder {
     private float smoothedPing = -1.0f;
 
     @Override
-    public float pprl$getSmoothedPing() {
+    public float getSmoothedPing() {
         return this.smoothedPing;
     }
 
     @Override
-    public void pprl$setSmoothedPing(float ping) {
+    public void setSmoothedPing(float ping) {
         this.smoothedPing = ping;
     }
 
@@ -27,12 +27,12 @@ public abstract class ServerPlayerMixin implements DataHolder {
     private long lastMessageTime = 0L;
 
     @Override
-    public long pprl$getLastMessageTime() {
+    public long getLastMessageTime() {
         return this.lastMessageTime;
     }
 
     @Override
-    public void pprl$setLastMessageTime(long time) {
+    public void setLastMessageTime(long time) {
         this.lastMessageTime = time;
     }
 }
