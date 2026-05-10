@@ -10,6 +10,9 @@ import net.fabricmc.loader.api.FabricLoader;
 public class PVPPingRangeLimitConfig {
 
     public boolean enabled = true; // The mod is enabled by default
+    public float maxPingDiff = 200.0f; // Default max ping is 200ms
+    public float alphaSmoothingFactor = 0.1f; // Default smoothing factor for alpha calculation
+    public int messageCooldown = 3; // Default cooldown of 3 seconds between messages
 
     private static final Gson GSON = new GsonBuilder()
         .setPrettyPrinting()
@@ -56,6 +59,9 @@ public class PVPPingRangeLimitConfig {
 
     public void save() {
         try {
+            // Ensure the config directory exists
+            Files.createDirectories(CONFIG_PATH.getParent());
+
             // Serialize the config object to a JSON string
             String json = GSON.toJson(this);
 
