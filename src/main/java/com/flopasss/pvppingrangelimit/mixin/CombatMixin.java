@@ -36,8 +36,8 @@ public abstract class CombatMixin {
         DataHolder targetHolder = (DataHolder) target;
 
         // Get the smoothed ping for both the attacker and the target
-        float attackerPing = attackerHolder.getSmoothedPing();
-        float targetPing = targetHolder.getSmoothedPing();
+        float attackerPing = attackerHolder.pprl$getSmoothedPing();
+        float targetPing = targetHolder.pprl$getSmoothedPing();
 
         // Safe-guard against uninitialized smoothed ping values (negative values indicate uninitialized)
         if (attackerPing < 0 || targetPing < 0) return;
@@ -53,7 +53,7 @@ public abstract class CombatMixin {
 
         // Get the current time and the last message time for the attacker
         long currentTime = System.currentTimeMillis();
-        long lastMsgTime = attackerHolder.getLastMessageTime();
+        long lastMsgTime = attackerHolder.pprl$getLastMessageTime();
 
         // Return early if the attacker is still on cooldown for receiving messages
         if (
@@ -67,6 +67,6 @@ public abstract class CombatMixin {
         );
 
         // Update the last message time for the attacker to the current time
-        attackerHolder.setLastMessageTime(currentTime);
+        attackerHolder.pprl$setLastMessageTime(currentTime);
     }
 }

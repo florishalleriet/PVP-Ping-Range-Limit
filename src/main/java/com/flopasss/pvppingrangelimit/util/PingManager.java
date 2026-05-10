@@ -27,11 +27,11 @@ public class PingManager {
 
         // Get the current ping and the old smoothed ping
         float currentPing = (float) player.connection.latency();
-        float oldEma = holder.getSmoothedPing();
+        float oldEma = holder.pprl$getSmoothedPing();
 
         // If oldEma is negative, it means we haven't initialized it yet, so set it to the current ping and return
         if (oldEma < 0) {
-            holder.setSmoothedPing(currentPing);
+            holder.pprl$setSmoothedPing(currentPing);
             return;
         }
 
@@ -40,6 +40,6 @@ public class PingManager {
         float newEma = (alpha * currentPing) + ((1.0f - alpha) * oldEma);
 
         // Update the smoothed ping in the holder
-        holder.setSmoothedPing(newEma);
+        holder.pprl$setSmoothedPing(newEma);
     }
 }
