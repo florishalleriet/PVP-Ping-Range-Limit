@@ -23,7 +23,7 @@ public class PingManager {
 
     private static void updateSmoothedPing(ServerPlayer player) {
         // Cast the player to PingDataHolder to access smoothed ping data
-        PingDataHolder holder = (PingDataHolder) player;
+        DataHolder holder = (DataHolder) player;
 
         // Get the current ping and the old smoothed ping
         float currentPing = (float) player.connection.latency();
