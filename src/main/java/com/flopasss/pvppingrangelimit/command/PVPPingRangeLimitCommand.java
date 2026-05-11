@@ -3,13 +3,16 @@ package com.flopasss.pvppingrangelimit.command;
 import static net.minecraft.commands.Commands.literal;
 
 import com.flopasss.pvppingrangelimit.PVPPingRangeLimit;
+import com.flopasss.pvppingrangelimit.util.DataHolder;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
 public class PVPPingRangeLimitCommand {
 
@@ -214,6 +217,118 @@ public class PVPPingRangeLimitCommand {
                                 return 1;
                             })
                         )
+                )
+                .then(
+                    literal("check").then(
+                        Commands.argument(
+                            "player",
+                            EntityArgument.player()
+                        ).executes(context -> {
+                            ServerPlayer target = EntityArgument.getPlayer(
+                                context,
+                                "player"
+                            ); // The player being checked is considered the target for this check
+                            ServerPlayer attacker = context
+                                .getSource()
+                                .getPlayerOrException(); // The player executing the command is considered the attacker for this check
+
+                            // Get the executing player smoothed ping
+                            DataHolder attackerHolder = (DataHolder) attacker;
+                            float attackerPing =
+                                attackerHolder.pprl$getSmoothedPing();
+
+                            // Check if the executing player smoothed ping is initialized
+                            if (attackerPing < 0) {
+                                context
+                                    .getSource()
+                                    .sendSuccess(
+                                        () ->
+                                            Component.literal(
+                                                "Your smoothed ping is not yet initialized. Please wait a moment and try again."
+                                            ),
+                                        false
+                                    );
+                                return 1;
+                            }
+
+                            // Show the executing player their own smoothed ping if they are checking themselves
+                            if (target == attacker) {
+                                context
+                                    .getSource()
+                                    .sendSuccess(
+                                        () ->
+                                            Component.literal(
+                                                "Your smoothed ping is: " +
+                                                    attackerPing +
+                                                    "ms"
+                                            ),
+                                        false
+                                    );
+                                return 1;
+                            }
+
+                            // Get the target smoothed ping
+                            DataHolder targetHolder = (DataHolder) target;
+                            float targetPing =
+                                targetHolder.pprl$getSmoothedPing();
+
+                            // Check if the target player smoothed ping is initialized
+                            if (targetPing < 0) {
+                                context
+                                    .getSource()
+                                    .sendSuccess(
+                                        () ->
+                                            Component.literal(
+                                                "The smoothed ping for player " +
+                                                    target
+                                                        .getName()
+                                                        .getString() +
+                                                    " is not yet initialized. Please wait a moment and try again."
+                                            ),
+                                        false
+                                    );
+                                return 1;
+                            }
+
+                            // Get the absolute ping difference
+                            float pingDiff = Math.abs(
+                                attackerPing - targetPing
+                            );
+
+                            // Check if the ping difference is within the allowed range
+                            boolean canFight =
+                                pingDiff <=
+                                PVPPingRangeLimit.CONFIG.maxPingDiff;
+
+                            // Send a system message to the executing player with the ping check results
+                            context
+                                .getSource()
+                                .sendSystemMessage(
+                                    Component.literal(
+                                        "§7--- Ping Check ---" +
+                                            "\n§7Your Ping: §f" +
+                                            String.format(
+                                                "%.1f",
+                                                attackerPing
+                                            ) +
+                                            "ms" +
+                                            "\n§7" +
+                                            target.getScoreboardName() +
+                                            "'s Ping: §f" +
+                                            String.format("%.1f", targetPing) +
+                                            "ms" +
+                                            "\n§7Difference: §f" +
+                                            String.format("%.1f", pingDiff) +
+                                            "ms" +
+                                            "\n§7Status: " +
+                                            (canFight
+                                                ? "§aCAN FIGHT"
+                                                : "§cCANCELLED")
+                                    )
+                                );
+                            return 1;
+                        })
+                    )
                 )
         );
     }

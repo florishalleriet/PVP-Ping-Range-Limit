@@ -46,7 +46,7 @@ public abstract class CombatMixin {
         float pingDiff = Math.abs(attackerPing - targetPing);
 
         // Return early if the ping difference is within the allowed range
-        if (pingDiff < PVPPingRangeLimit.CONFIG.maxPingDiff) return;
+        if (pingDiff <= PVPPingRangeLimit.CONFIG.maxPingDiff) return;
 
         // Cancel the attack
         cir.setReturnValue(false);
