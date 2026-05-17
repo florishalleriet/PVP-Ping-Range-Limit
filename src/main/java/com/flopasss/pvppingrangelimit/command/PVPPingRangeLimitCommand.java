@@ -94,7 +94,8 @@ public class PVPPingRangeLimitCommand {
                         .then(
                             Commands.argument(
                                 "float",
-                                FloatArgumentType.floatArg(0.0f) // Minimum value of 0ms
+                                FloatArgumentType
+                                    .floatArg(0.0f) // Minimum value of 0ms
                             ).executes(context -> {
                                 float value = FloatArgumentType.getFloat(
                                     context,
@@ -142,7 +143,8 @@ public class PVPPingRangeLimitCommand {
                         .then(
                             Commands.argument(
                                 "float",
-                                FloatArgumentType.floatArg(0.0f, 1.0f) // Minimum value of 0.0 and maximum value of 1.0
+                                FloatArgumentType
+                                    .floatArg(0.0f, 1.0f) // Minimum value of 0.0 and maximum value of 1.0
                             ).executes(context -> {
                                 float value = FloatArgumentType.getFloat(
                                     context,
@@ -191,7 +193,8 @@ public class PVPPingRangeLimitCommand {
                         .then(
                             Commands.argument(
                                 "int",
-                                IntegerArgumentType.integer(0) // Minimum value of 0 seconds
+                                IntegerArgumentType
+                                    .integer(0) // Minimum value of 0 seconds
                             ).executes(context -> {
                                 int value = IntegerArgumentType.getInteger(
                                     context,
@@ -237,20 +240,6 @@ public class PVPPingRangeLimitCommand {
                             float attackerPing =
                                 attackerHolder.pprl$getSmoothedPing();
 
-                            // Check if the executing player smoothed ping is initialized
-                            if (attackerPing < 0) {
-                                context
-                                    .getSource()
-                                    .sendSuccess(
-                                        () ->
-                                            Component.literal(
-                                                "Your smoothed ping is not yet initialized. Please wait a moment and try again."
-                                            ),
-                                        false
-                                    );
-                                return 1;
-                            }
-
                             // Show the executing player their own smoothed ping if they are checking themselves
                             if (target == attacker) {
                                 context
@@ -259,7 +248,10 @@ public class PVPPingRangeLimitCommand {
                                         () ->
                                             Component.literal(
                                                 "Your smoothed ping is: " +
-                                                    attackerPing +
+                                                    String.format(
+                                                        "%.1f",
+                                                        attackerPing
+                                                    ) +
                                                     "ms"
                                             ),
                                         false
@@ -271,24 +263,6 @@ public class PVPPingRangeLimitCommand {
                             DataHolder targetHolder = (DataHolder) target;
                             float targetPing =
                                 targetHolder.pprl$getSmoothedPing();
-
-                            // Check if the target player smoothed ping is initialized
-                            if (targetPing < 0) {
-                                context
-                                    .getSource()
-                                    .sendSuccess(
-                                        () ->
-                                            Component.literal(
-                                                "The smoothed ping for player " +
-                                                    target
-                                                        .getName()
-                                                        .getString() +
-                                                    " is not yet initialized. Please wait a moment and try again."
-                                            ),
-                                        false
-                                    );
-                                return 1;
-                            }
 
                             // Get the absolute ping difference
                             float pingDiff = Math.abs(

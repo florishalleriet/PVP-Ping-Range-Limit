@@ -39,9 +39,6 @@ public abstract class CombatMixin {
         float attackerPing = attackerHolder.pprl$getSmoothedPing();
         float targetPing = targetHolder.pprl$getSmoothedPing();
 
-        // Safe-guard against uninitialized smoothed ping values (negative values indicate uninitialized)
-        if (attackerPing < 0 || targetPing < 0) return;
-
         // Calculate the absolute ping difference
         float pingDiff = Math.abs(attackerPing - targetPing);
 

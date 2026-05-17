@@ -10,7 +10,7 @@ public abstract class ServerPlayerMixin implements DataHolder {
 
     // Smoothed ping
     @Unique
-    private float smoothedPing = -1.0f;
+    private float smoothedPing = 0.0f;
 
     @Override
     public float pprl$getSmoothedPing() {
@@ -20,6 +20,20 @@ public abstract class ServerPlayerMixin implements DataHolder {
     @Override
     public void pprl$setSmoothedPing(float ping) {
         this.smoothedPing = ping;
+    }
+
+    // Initialized
+    @Unique
+    private boolean smoothedPingInitialized = false;
+
+    @Override
+    public boolean pprl$isSmoothedPingInitialized() {
+        return this.smoothedPingInitialized;
+    }
+
+    @Override
+    public void pprl$setSmoothedPingInitialized(boolean initialized) {
+        this.smoothedPingInitialized = initialized;
     }
 
     // Message cooldown

@@ -27,15 +27,21 @@ public class PingManager {
 
         // Get the current ping and the old smoothed ping
         float currentPing = (float) player.connection.latency();
-        float oldEma = holder.pprl$getSmoothedPing();
 
-        // If oldEma is negative, it means we haven't initialized it yet, so set it to the current ping and return
-        if (oldEma < 0) {
+        // If the smoothed ping is not initialized, set it to the current ping
+        if (!holder.pprl$isSmoothedPingInitialized()) {
             holder.pprl$setSmoothedPing(currentPing);
+
+            // Mark as initialized if we have a ping value greater than 0
+            if (currentPing > 0.0f) holder.pprl$setSmoothedPingInitialized(
+                true
+            );
+
             return;
         }
 
         // Calculate the new smoothed ping using exponential moving average
+        float oldEma = holder.pprl$getSmoothedPing();
         float alpha = PVPPingRangeLimit.CONFIG.alphaSmoothingFactor;
         float newEma = (alpha * currentPing) + ((1.0f - alpha) * oldEma);
 
